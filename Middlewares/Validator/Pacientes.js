@@ -81,7 +81,7 @@ const schemaUpdatePacienteBody = {
     properties: {
         nombres: {
             type: 'string',
-            pattern: '^[a-zA-Z0-9]+$',
+            pattern: '^[a-zA-Z0-9- ]+$',
             errorMessage: {
                 type: 'El campo nombres debe ser de tipo texto',
                 pattern: 'El campo nombres solo debe contener letras y guiones',
@@ -89,7 +89,7 @@ const schemaUpdatePacienteBody = {
         },
         apellidos: {
             type: 'string',
-            pattern: '^[a-zA-Z0-9]+$',
+            pattern: '^[a-zA-Z0-9- ]+$',
             errorMessage: {
                 type: 'El campo apellidos debe ser de tipo texto',
                 pattern: 'El campo code apellidos debe contener letras y guiones',
@@ -188,7 +188,7 @@ const schemaSearchPacienteQuery = {
     properties: {
         parametro: {
             type: 'string',
-            pattern: '^[a-zA-Z-]+$',
+            pattern: '^[a-zA-Z- ]+$',
             errorMessage: {
                 type: 'El campo parametro debe ser de tipo texto',
                 pattern: 'El campo parametro solo debe contener letras',
