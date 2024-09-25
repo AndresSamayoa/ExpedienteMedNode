@@ -39,14 +39,13 @@ async function createOne (req, res, next) {
     try {
 
         const medico = await models.medicos.create({
-                        
-           // USR_id INT NULL,
-            MED_nombre : req.body.nombres,
-            MED_apellido: req.body.apellidos ,
-            MED_tipo: req.body.tipo_medico,
-            MED_telefono: req.body.numero_telefono ,
-            MED_correo:req.body.correo_electronico ,
-            MED_numero_colegiado: req.body.numero_colegiado,
+            USR_id: req.body.usuario_id,    
+            med_nombre : req.body.nombres,
+            med_apellido: req.body.apellidos ,
+            med_tipo: req.body.tipo_medico,
+            med_telefono: req.body.numero_telefono ,
+            med_correo:req.body.correo_electronico ,
+            med_numero_colegiado: req.body.numero_colegiado,
             
         });
 
@@ -93,12 +92,13 @@ async function updateOne (req, res, next) {
         }
 
         await medico.update({
-            MED_nombre : req.body.nombres,
-            MED_apellido: req.body.apellidos ,
-            MED_tipo: req.body.tipo_medico,
-            MED_telefono: req.body.numero_telefono ,
-            MED_correo:req.body.correo_electronico ,
-            MED_numero_colegiado: req.body.numero_colegiado,
+            USR_id: req.body.usuario_id,    
+            med_nombre : req.body.nombres,
+            med_apellido: req.body.apellidos ,
+            med_tipo: req.body.tipo_medico,
+            med_telefono: req.body.numero_telefono ,
+            med_correo:req.body.correo_electronico ,
+            med_numero_colegiado: req.body.numero_colegiado,
 
         });
 
