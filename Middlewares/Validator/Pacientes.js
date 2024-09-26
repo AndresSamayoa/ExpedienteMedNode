@@ -7,7 +7,7 @@ const schemaCrearPacienteBody = {
     properties: {
         nombres: {
             type: 'string',
-            pattern: '^[a-zA-Z-]+$',
+            pattern: '^[a-zA-Z- ]+$',
             errorMessage: {
                 type: 'El campo nombres debe ser de tipo texto',
                 pattern: 'El campo nombres solo debe contener letras y guiones',
