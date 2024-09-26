@@ -23,45 +23,20 @@ const schemaCrearCitaBody = {
         },
         fecha: {
             type: 'string',
-            pattern: '^\\d{4}-\\d{2}-\\d{2}$',
+            pattern: '^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$',
             errorMessage: {
                 type: 'El campo fecha debe ser de tipo texto',
-                pattern: 'El campo fecha debe tener el formato YYYY-MM-DD'
-            }
-        },
-        hora: {
-            type: ['string','number'],
-            pattern: '^[0-9]+$',
-            maximum: 23,
-            minimum: 0,
-            errorMessage: {
-                type: 'El campo hora debe ser de tipo numerico',
-                pattern: 'El campo hora debe de contener solo numeros',
-                maximum: 'El campo hora debe de ser menor o igual a 23',
-                minimum: 'El campo hora debe de ser mayor o igual a 0'
-            }
-        },
-        estado: {
-            type: ['string','number'],
-            pattern: '^[0-1]+$',
-            maximum: 1,
-            minimum: 0,
-            errorMessage: {
-                type: 'El campo estado debe ser de tipo numerico',
-                pattern: 'El campo estado debe de contener solo numeros',
-                maximum: 'El campo estado debe de ser 0 o 1',
-                minimum: 'El campo estado debe de ser 0 o 1'
+                pattern: 'El campo fecha debe tener el formato YYYY-MM-DD hh:mm:ss'
             }
         },
     },
-    required: ['medico_id', 'paciente_id', 'fecha', 'hora', 'estado'],
+    required: ['medico_id', 'paciente_id', 'fecha'],
     errorMessage: {
         required: {
             medico_id: 'El campo medico es obligatorio',
             paciente_id: 'El campo paciente es obligatorio',
             fecha: 'El campo fecha es obligatorio',
             hora: 'El campo hora nacimiento es obligatorio',
-            estado: 'El campo estado telefono es obligatorio',
         }
     },
     additionalProperties: false
@@ -88,34 +63,10 @@ const schemaUpdateCitaBody = {
         },
         fecha: {
             type: 'string',
-            pattern: '^\\d{4}-\\d{2}-\\d{2}$',
+            pattern: '^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$',
             errorMessage: {
                 type: 'El campo fecha debe ser de tipo texto',
-                pattern: 'El campo fecha debe tener el formato YYYY-MM-DD'
-            }
-        },
-        hora: {
-            type: ['string','number'],
-            pattern: '^[0-9]+$',
-            maximum: 23,
-            minimum: 0,
-            errorMessage: {
-                type: 'El campo hora debe ser de tipo numerico',
-                pattern: 'El campo hora debe de contener solo numeros',
-                maximum: 'El campo hora debe de ser menor o igual a 23',
-                minimum: 'El campo hora debe de ser mayor o igual a 0'
-            }
-        },
-        estado: {
-            type: ['string','number'],
-            pattern: '^[0-1]+$',
-            maximum: 1,
-            minimum: 0,
-            errorMessage: {
-                type: 'El campo estado debe ser de tipo numerico',
-                pattern: 'El campo estado debe de contener solo numeros',
-                maximum: 'El campo estado debe de ser 0 o 1',
-                minimum: 'El campo estado debe de ser 0 o 1'
+                pattern: 'El campo fecha debe tener el formato YYYY-MM-DD hh:mm:ss'
             }
         },
     },
@@ -171,7 +122,7 @@ const schemaSearchCitaQuery = {
     properties: {
         parametro: {
             type: 'string',
-            pattern: '^[a-zA-Z-]+$',
+            pattern: '^[a-zA-Z- ]+$',
             errorMessage: {
                 type: 'El campo parametro debe ser de tipo texto',
                 pattern: 'El campo parametro solo debe contener letras',

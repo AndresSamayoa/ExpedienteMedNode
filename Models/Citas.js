@@ -1,15 +1,15 @@
 const { DataTypes, Model } = require('sequelize')
 
 module.exports = (db) => {
-    class pacientes extends Model {}
-    pacientes.init(
+    class citas extends Model {}
+    citas.init(
       {
         cit_id: { type: DataTypes.INTEGER, primaryKey: true, allowNull: false, autoIncrement: true },
         med_id: DataTypes.INTEGER,
         pac_id: DataTypes.INTEGER,
         cit_fecha: DataTypes.DATE,
-        cit_hora: DataTypes.INTEGER,
-        cit_estado: DataTypes.TINYINT,
+        cit_estado: DataTypes.ENUM('Programada', 'Atendida', 'Completada', 'Cancelada'),
+        cit_costo_total: DataTypes.DECIMAL,
         cit_fecha_eliminacion: DataTypes.DATE
     }, {
         timestamps: false,
@@ -24,5 +24,5 @@ module.exports = (db) => {
         omitNull: true
   });
 
-  return pacientes;
+  return citas;
 }

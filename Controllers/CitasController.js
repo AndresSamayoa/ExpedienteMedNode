@@ -4,10 +4,10 @@ const models = require('../Models');
 const { _expMedico } = require('../Utils/Database');
 const { notFoundError, badRequestError } = require('../errors');
 
-async function validarDisponibilidad (medico_id, fecha, hora) {
+async function validarDisponibilidad (medico_id, fecha) {
     const [[estado]] = await _expMedico.query(
-        'exec pas_validar_hora_cita :MedicoId, :Fecha, :Hora;',
-        {replacements: { MedicoId: medico_id, Fecha: fecha, Hora: hora } }
+        'exec pas_validar_hora_cita :MedicoId, :Fecha;',
+        {replacements: { MedicoId: medico_id, Fecha: fecha } }
     );
 
     return estado;
@@ -37,6 +37,24 @@ async function readAll (req, res, next) {
     }
 };
 
+async function readOne (req, res, next) {
+    try {
+        const cita = await models.citas.findOne({where: {cit_id: req.params.id}});
+
+        if(!cita) {
+            throw notFoundError('No se encontro la cita')
+        }
+
+        return res.status(200).send({
+            status: true,
+            message: 'Exito al consultar',
+            data: cita
+        })
+    } catch (error) {
+        next(error);
+    }
+};
+
 async function searchAll (req, res, next) {
     try {
         const [citas] = await _expMedico.query(
@@ -58,7 +76,7 @@ async function createOne (req, res, next) {
     try {
         await validarLlavesForaneas(req.body.medico_id, req.body.paciente_id);
 
-        const citaValidacion = await validarDisponibilidad(req.body.medico_id, req.body.fecha, req.body.hora);
+        const citaValidacion = await validarDisponibilidad(req.body.medico_id, req.body.fecha);
 
         if (!citaValidacion.Valido) {
             throw badRequestError(citaValidacion.Mensaje);
@@ -67,9 +85,8 @@ async function createOne (req, res, next) {
         const cita = await models.citas.create({
             med_id: req.body.medico_id,
             pac_id: req.body.paciente_id,
-            cit_fecha: req.body.fecha,
-            cit_hora: req.body.hora,
-            cit_estado: req.body.estado
+            cit_fecha: moment(req.body.fecha).format('YYYY-MM-DD HH:mm:ss'),
+            cit_estado: models.citas.rawAttributes.cit_estado.values[0]
         });
 
         return res.status(200).send({
@@ -117,10 +134,9 @@ async function updateOne (req, res, next) {
 
         if (
             (req.body.medico_id && cita.med_id != req.body.medico_id) ||
-            (req.body.fecha && cita.cit_fecha != req.body.fecha) ||
-            (req.body.hora && cita.cit_hora != req.body.hora)
+            (req.body.fecha && cita.cit_fecha != req.body.fecha)
         ) {
-            const citaValidacion = await validarDisponibilidad(req.body.medico_id, req.body.fecha, req.body.hora);
+            const citaValidacion = await validarDisponibilidad(req.body.medico_id, req.body.fecha);
 
             if (!citaValidacion.Valido) {
                 throw badRequestError(citaValidacion.Mensaje);
@@ -130,9 +146,7 @@ async function updateOne (req, res, next) {
         await cita.update({
             med_id: req.body.medico_id,
             pac_id: req.body.paciente_id,
-            cit_fecha: req.body.fecha,
-            cit_hora: req.body.hora,
-            cit_estado: req.body.estado
+            cit_fecha: moment(req.body.fecha).format('YYYY-MM-DD HH:mm:ss')
         });
 
         return res.status(200).send({
@@ -145,10 +159,53 @@ async function updateOne (req, res, next) {
     }
 };
 
+async function updateAttended (req, res, next) {
+    try {
+        const cita = await models.citas.findOne({where: { cit_id: req.params.id }});
+
+        if (!cita) {
+            throw notFoundError('No se encontro la cita.');
+        }
+
+        await cita.update({
+            cit_estado: models.citas.rawAttributes.states.values[1]
+        });
+
+        return res.status(200).send({
+            status: true,
+            message: 'Exito al actualizar',
+            data: cita
+        })
+    } catch (error) {
+        next(error);
+    }
+};
+
+async function updateClose (req, res, next) {
+    try {
+
+        // Consumir sp
+        await _expMedico.query('exec pas_cerrar_cita :CitaId', 
+            {replacements: {CitaId: req.params.id}}
+        );
+
+        return res.status(200).send({
+            status: true,
+            message: 'Exito al actualizar',
+            data: {}
+        })
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     readAll,
+    readOne,
     createOne,
     deleteOne,
     updateOne,
+    updateAttended,
+    updateClose,
     searchAll
 }
