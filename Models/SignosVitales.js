@@ -5,7 +5,7 @@ module.exports = (db) => {
     Signosvitales.init(
       {
         SIG_id: { type: DataTypes.INTEGER, primaryKey: true, allowNull: false, autoIncrement: true },
-        PAC_id: DataTypes.INTEGER,
+        CIT_id: DataTypes.INTEGER,
         SIG_presion_arterial: DataTypes.STRING,
         SIG_temperatura:DataTypes.STRING,
         SIG_frecuencia_cardiaca :DataTypes.STRING,
