@@ -168,7 +168,7 @@ async function updateAttended (req, res, next) {
         }
 
         await cita.update({
-            cit_estado: models.citas.rawAttributes.states.values[1]
+            cit_estado: models.citas.rawAttributes.cit_estado.values[1]
         });
 
         return res.status(200).send({
@@ -199,6 +199,38 @@ async function updateClose (req, res, next) {
     }
 };
 
+async function readDetailed (req, res, next) {
+    try {
+        const [citaArr] = await _expMedico.query(
+            'select * from fas_info_general_cita(:Cita);',
+            {replacements: {Cita: req.params.id}}
+        );
+
+        const cita = citaArr[0];
+
+        if(!cita) {
+            throw notFoundError('No se encontro la cita')
+        }
+
+        const [procedimientos] = await _expMedico.query(
+            'select * from fas_procedimientos_medicos_cita(:Cita)',
+            {replacements: {Cita: cita.CIT_id}}
+        );
+
+        cita['procedimientos'] = procedimientos;
+
+        // Consultar diagnosticos y recetas
+
+        return res.status(200).send({
+            status: true,
+            message: 'Cita consultada exitosamente',
+            data: cita
+        })
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     readAll,
     readOne,
@@ -207,5 +239,6 @@ module.exports = {
     updateOne,
     updateAttended,
     updateClose,
-    searchAll
+    searchAll,
+    readDetailed
 }

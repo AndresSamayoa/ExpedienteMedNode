@@ -105,10 +105,10 @@ async function deleteOne (req, res, next) {
 async function updateOne (req, res, next) {
     try {
 
-        const procedimiento = await models.procedimientos_medicos.findOne({where: { cit_id: req.params.id }});
+        const procedimiento = await models.procedimientos_medicos.findOne({where: { pro_id: req.params.id }});
 
         if(!procedimiento) {
-            throw notFoundError('No se encontro la cita.');
+            throw notFoundError('No se encontro el procedimiento.');
         }
 
         const external = await validarLlavesForaneas(req.body.cita_id || cita.cit_id, req.body.procedimiento_id || cita.cpm_id);

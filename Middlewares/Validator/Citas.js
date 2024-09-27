@@ -117,6 +117,27 @@ const schemaDeleteCitaParam = {
     additionalProperties: false
 }
 
+const schemaGetCitaParam = {
+    type: 'object',
+    properties: {
+        id: {
+            type: ['string','number'],
+            pattern: '^[0-9]+$',
+            errorMessage: {
+                type: 'El campo id debe ser de tipo texto',
+                pattern: 'El campo id solo debe contener numeros',
+            }
+        },
+    },
+    required: ['id'],
+    errorMessage: {
+        required: {
+            id: 'El campo id es obligatorio',
+        }
+    },
+    additionalProperties: false
+}
+
 const schemaSearchCitaQuery = {
     type: 'object',
     properties: {
@@ -138,4 +159,4 @@ const schemaSearchCitaQuery = {
     additionalProperties: false
 }
 
-module.exports = { schemaCrearCitaBody, schemaUpdateCitaBody, schemaUpdateCitaParam, schemaDeleteCitaParam, schemaSearchCitaQuery }
+module.exports = { schemaCrearCitaBody, schemaUpdateCitaBody, schemaUpdateCitaParam, schemaDeleteCitaParam, schemaSearchCitaQuery, schemaGetCitaParam }
