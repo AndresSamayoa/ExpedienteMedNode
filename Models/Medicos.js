@@ -17,7 +17,7 @@ module.exports = (db) => {
         timestamps: false,
         freezeTableName: true,
         sequelize: db,
-        modelName: 'CLI_Medicos',
+        modelName: 'CLI_MEDICOS',
         defaultScope: {
             where: {
                 med_fecha_eliminacion: null
