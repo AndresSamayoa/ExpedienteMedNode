@@ -29,12 +29,12 @@ async function readAll (req, res, next) {
 
 async function searchAll (req, res, next) {
     try {
+
         const parametro = req.query.parametro;
         const [signosvitales] = await _expMedico.query(
             'select * FROM CLI_SIGNOS_VITALES WHERE SIG_id LIKE :parametro;',
             {replacements: {  parametro: `%${parametro}%` } }
         );
-
         return res.status(200).send({
             status: true,
             message: 'Exito al consultar',
@@ -45,6 +45,23 @@ async function searchAll (req, res, next) {
     }
 };
 
+
+async function buscar (req, res, next) {
+    try 
+    {
+        const signosvitales = await models.signosvitales.findAll({where: { CIT_id: req.params.id }});
+
+            return res.status(200).send({
+            status: true,
+            message: 'Exito al consultar',
+            data: signosvitales
+        })
+    } 
+    catch (error) 
+    {
+        next(error);
+    }
+};
 
 
 async function createOne (req, res, next) {
@@ -135,5 +152,6 @@ module.exports = {
     createOne,
     deleteOne,
     updateOne,
-    searchAll
+    searchAll,
+    buscar
 }
