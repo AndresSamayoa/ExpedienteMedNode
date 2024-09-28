@@ -219,6 +219,11 @@ async function readDetailed (req, res, next) {
 
         cita['procedimientos'] = procedimientos;
 
+        // Consultar signos vitales
+        const signos_vitales = await models.signosvitales.findOne({where: {CIT_id: cita.CIT_id}});
+
+        cita['signosVitales'] = signos_vitales;
+
         // Consultar diagnosticos y recetas
 
         return res.status(200).send({
