@@ -2,71 +2,87 @@ const Ajv = require("ajv")
 const ajv = new Ajv({allErrors: true, allowUnionTypes:true})
 require("ajv-errors")(ajv)
 
-const schemaCrearCitaBody = {
+const schemaCrearProcBody = {
     type: 'object',
     properties: {
-        medico_id: {
-            type: ['string','number'],
-            pattern: '^[0-9]+$',
-            errorMessage: {
-                type: 'El campo de medico debe ser de tipo numerico',
-                pattern: 'El campo medico solo debe contener numeros',
-            }
-        },
-        paciente_id: {
-            type: ['string','number'],
-            pattern: '^[0-9]+$',
-            errorMessage: {
-                type: 'El campo paciente debe ser de tipo numerico',
-                pattern: 'El campo paciente solo debe contener numeros',
-            }
-        },
-        fecha: {
+        nombre: {
             type: 'string',
-            pattern: '^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$',
+            pattern: '^[a-zA-Z- ]+$',
             errorMessage: {
-                type: 'El campo fecha debe ser de tipo texto',
-                pattern: 'El campo fecha debe tener el formato YYYY-MM-DD hh:mm:ss'
+                type: 'El campo nombres debe ser de tipo texto',
+                pattern: 'El campo nombres solo debe contener letras y guiones',
+            }
+        },
+        precio: {
+            type: ['string','number'],
+            pattern: '^\d*(\.\d+)?$',
+            errorMessage: {
+                type: 'El campo precio debe ser de tipo numerico',
+                pattern: 'El campo precio debe contener numeros y solo 1 punto decimal',
+            }
+        },
+        local: {
+            type: ['string','number'],
+            pattern: '^[0-1]+$',
+            errorMessage: {
+                type: 'El campo local debe ser de tipo numero',
+                pattern: 'El campo cui debe ser 0 o 1',
+            }
+        },
+        examen: {
+            type: ['string','number'],
+            pattern: '^[0-1]+$',
+            errorMessage: {
+                type: 'El campo examen debe ser de tipo numero',
+                pattern: 'El campo examen debe 0 o 1',
             }
         },
     },
-    required: ['medico_id', 'paciente_id', 'fecha'],
+    required: ['nombre', 'precio', 'local', 'examen'],
     errorMessage: {
         required: {
-            medico_id: 'El campo medico es obligatorio',
-            paciente_id: 'El campo paciente es obligatorio',
-            fecha: 'El campo fecha es obligatorio',
-            hora: 'El campo hora nacimiento es obligatorio',
+            nombre: 'El campo nombre es obligatorio',
+            precio: 'El campo precio es obligatorio',
+            local: 'El campo local es obligatorio',
+            examen: 'El campo examen nacimiento es obligatorio',
         }
     },
     additionalProperties: false
 }
 
-const schemaUpdateCitaBody = {
+const schemaUpdateProcBody = {
     type: 'object',
     properties: {
-        medico_id: {
-            type: ['string','number'],
-            pattern: '^[0-9]+$',
-            errorMessage: {
-                type: 'El campo de medico debe ser de tipo numerico',
-                pattern: 'El campo medico solo debe contener numeros',
-            }
-        },
-        paciente_id: {
-            type: ['string','number'],
-            pattern: '^[0-9]+$',
-            errorMessage: {
-                type: 'El campo paciente debe ser de tipo numerico',
-                pattern: 'El campo paciente solo debe contener numeros',
-            }
-        },
-        fecha: {
+        nombre: {
             type: 'string',
-            pattern: '^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$',
+            pattern: '^[a-zA-Z- ]+$',
             errorMessage: {
-                type: 'El campo fecha debe ser de tipo texto',
-                pattern: 'El campo fecha debe tener el formato YYYY-MM-DD hh:mm:ss'
+                type: 'El campo nombres debe ser de tipo texto',
+                pattern: 'El campo nombres solo debe contener letras y guiones',
+            }
+        },
+        precio: {
+            type: ['string','number'],
+            pattern: '^\d*(\.\d+)?$',
+            errorMessage: {
+                type: 'El campo precio debe ser de tipo numerico',
+                pattern: 'El campo precio debe contener numeros y solo 1 punto decimal',
+            }
+        },
+        local: {
+            type: ['string','number'],
+            pattern: '^[0-1]+$',
+            errorMessage: {
+                type: 'El campo local debe ser de tipo numero',
+                pattern: 'El campo cui debe ser 0 o 1',
+            }
+        },
+        examen: {
+            type: ['string','number'],
+            pattern: '^[0-1]+$',
+            errorMessage: {
+                type: 'El campo examen debe ser de tipo numero',
+                pattern: 'El campo examen debe 0 o 1',
             }
         },
     },
@@ -75,7 +91,49 @@ const schemaUpdateCitaBody = {
     additionalProperties: false
 }
 
-const schemaUpdateCitaParam = {
+const schemaUpdateProcParam = {
+    type: 'object',
+    properties: {
+        id: {
+            type: ['string','number'],
+            pattern: '^[0-9]+$',
+            errorMessage: {
+                type: 'El campo id debe ser de tipo numero',
+                pattern: 'El campo id solo debe contener numeros',
+            }
+        },
+    },
+    required: ['id'],
+    errorMessage: {
+        required: {
+            id: 'El campo id es obligatorio',
+        }
+    },
+    additionalProperties: false
+}
+
+const schemaReadOneProcParam = {
+    type: 'object',
+    properties: {
+        id: {
+            type: ['string','number'],
+            pattern: '^[0-9]+$',
+            errorMessage: {
+                type: 'El campo id debe ser de tipo numero',
+                pattern: 'El campo id solo debe contener numeros',
+            }
+        },
+    },
+    required: ['id'],
+    errorMessage: {
+        required: {
+            id: 'El campo id es obligatorio',
+        }
+    },
+    additionalProperties: false
+}
+
+const schemaDeleteProcParam = {
     type: 'object',
     properties: {
         id: {
@@ -96,49 +154,7 @@ const schemaUpdateCitaParam = {
     additionalProperties: false
 }
 
-const schemaDeleteCitaParam = {
-    type: 'object',
-    properties: {
-        id: {
-            type: ['string','number'],
-            pattern: '^[0-9]+$',
-            errorMessage: {
-                type: 'El campo id debe ser de tipo texto',
-                pattern: 'El campo id solo debe contener numeros',
-            }
-        },
-    },
-    required: ['id'],
-    errorMessage: {
-        required: {
-            id: 'El campo id es obligatorio',
-        }
-    },
-    additionalProperties: false
-}
-
-const schemaGetCitaParam = {
-    type: 'object',
-    properties: {
-        id: {
-            type: ['string','number'],
-            pattern: '^[0-9]+$',
-            errorMessage: {
-                type: 'El campo id debe ser de tipo texto',
-                pattern: 'El campo id solo debe contener numeros',
-            }
-        },
-    },
-    required: ['id'],
-    errorMessage: {
-        required: {
-            id: 'El campo id es obligatorio',
-        }
-    },
-    additionalProperties: false
-}
-
-const schemaSearchCitaQuery = {
+const schemaSearchProcQuery = {
     type: 'object',
     properties: {
         parametro: {
@@ -159,4 +175,4 @@ const schemaSearchCitaQuery = {
     additionalProperties: false
 }
 
-module.exports = { schemaCrearCitaBody, schemaUpdateCitaBody, schemaUpdateCitaParam, schemaDeleteCitaParam, schemaSearchCitaQuery, schemaGetCitaParam }
+module.exports = { schemaCrearProcBody, schemaUpdateProcBody, schemaUpdateProcParam, schemaReadOneProcParam, schemaDeleteProcParam, schemaSearchProcQuery }
