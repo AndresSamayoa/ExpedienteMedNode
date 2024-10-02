@@ -12,9 +12,9 @@ function validateBody(schema) {
             const errors = validate.errors.map(error => error.message);
             const errorMessage = errors.join('. ');
             return res.status(400).send({
-                result: false,
+                status: false,
                 message: errorMessage,
-                records: ''
+                data: ''
             });
         }
 
@@ -32,9 +32,9 @@ function validateParams(schema) {
             const errors = validate.errors.map(error => error.message);
             const errorMessage = errors.join('. ');
             return res.status(400).send({
-                result: false,
+                status: false,
                 message: errorMessage,
-                records: ''
+                data: ''
             });
         }
 
@@ -52,9 +52,9 @@ function validateQuery(schema) {
             const errors = validate.errors.map(error => error.message);
             const errorMessage = errors.join('. ');
             return res.status(400).send({
-                result: false,
+                status: false,
                 message: errorMessage,
-                records: ''
+                data: ''
             });
         }
 
