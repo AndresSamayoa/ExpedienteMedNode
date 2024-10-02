@@ -96,7 +96,7 @@ async function updateOne (req, res, next) {
             throw notFoundError('No se encontro el horarios.');
         }
 
-        await paciente.update({
+        await horarios.update({
             med_id: req.body.medi_id,
             hor_inicio: req.body.hora_inicio,
             hor_fin: req.body.hora_fin,
