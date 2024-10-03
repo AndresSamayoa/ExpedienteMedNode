@@ -224,7 +224,13 @@ async function readDetailed (req, res, next) {
 
         cita['signosVitales'] = signos_vitales;
 
-        // Consultar diagnosticos y recetas
+        // Consultar diagnosticos
+        const [diagnosticos] = await _expMedico.query(
+            'select * from fas_buscar_diagnosticos(:Cita);',
+            {replacements: { Cita: cita.CIT_id } }
+        );
+
+        cita['diagnosticos'] = diagnosticos;
 
         return res.status(200).send({
             status: true,
