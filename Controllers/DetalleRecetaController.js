@@ -9,9 +9,11 @@ async function validarLlavesForaneas (medicamento_id, receta_id) {
     
     if (!receta) throw notFoundError('No se encontro la receta');
 
-    //const medicamento = await models.medicamento.findOne({where: { med_id: medicamento_id }});
+    const medicamento = await models.medicamentos.findOne({where: { med_id: medicamento_id }});
     
-    //if (!medicamento) throw notFoundError('No se encontro el medicamento');
+    if (!medicamento) throw notFoundError('No se encontro el medicamento');
+
+    return {medicamento}
 }
 
 async function readAll (req, res, next) {
@@ -48,15 +50,14 @@ async function searchAll (req, res, next) {
 
 async function createOne (req, res, next) {
     try {
-        await validarLlavesForaneas(req.body.medicamento_id, req.body.receta_id);
-console.log (req.body)
+        const references = await validarLlavesForaneas(req.body.medicamento_id, req.body.receta_id);
         
         const detallereceta = await models.detallereceta.create({
             med_id: req.body.medicamento_id,
             rec_id: req.body.receta_id,
             det_comentarios: req.body.comentario,
             det_cantidad: req.body.cantidad,
-            det_subtotal: req.body.subtotal
+            det_subtotal: references.medicamento.med_precio * req.body.cantidad
             
         });
 
@@ -101,16 +102,14 @@ async function updateOne (req, res, next) {
             throw notFoundError('No se encontro el detalle.');
         }
 
-        await validarLlavesForaneas(req.body.medicamento_id || detallereceta.med_id, req.body.receta_id);
-
-
+        const references = await validarLlavesForaneas(req.body.medicamento_id || detallereceta.med_id, req.body.receta_id);
 
         await detallereceta.update({
             med_id: req.body.medicamento_id,
             rec_id: req.body.receta_id,
             det_comentario: req.body.comentario,
             det_cantidad: req.body.cantidad,
-            det_subtotal: req.body.det_subtotal
+            det_subtotal: references.medicamento.med_precio * req.body.cantidad
         });
 
         return res.status(200).send({
@@ -126,7 +125,11 @@ async function updateOne (req, res, next) {
 async function buscar (req, res, next) {
     try 
     {
-        const detallereceta = await models.detallereceta.findAll({where: { REC_id: req.params.id }});
+        const [detallereceta] = await _expMedico.query(
+            'select * from fas_buscar_detalle_receta(:Param);',
+            {replacements: { Param: req.query.parametro } }
+        );
+
         return res.status(200).send({
             status: true,
             message: 'Exito al consultar',

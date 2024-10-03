@@ -8,6 +8,6 @@ routes.post('/detallereceta', createOne);
 routes.put('/detallereceta/:id', updateOne);
 routes.delete('/detallereceta/:id', deleteOne);
 routes.get('/detallereceta', readAll);
-routes.get('/detallereceta/buscar', searchAll);
-routes.get('/detallereceta/:id', buscar);
+routes.get('/detallereceta/buscar', buscar);
+// routes.get('/detallereceta/:id', buscar);
 module.exports = routes;

@@ -5,9 +5,9 @@ const { _expMedico } = require('../Utils/Database');
 const { notFoundError, badRequestError } = require('../errors');
 
 async function validarLlavesForaneas (diagnostico_id) {
-    //const diagnostico = await models.diagnostico.findOne({where: { DIA_id: diagnostico_id }});
+    const diagnostico = await models.diagnosticos.findOne({where: { DIA_id: diagnostico_id }});
     
-    //if (!diagnostico) throw notFoundError('No se encontro el diagnostico');
+    if (!diagnostico) throw notFoundError('No se encontro el diagnostico');
 
 }
 
@@ -45,11 +45,11 @@ async function searchAll (req, res, next) {
 
 async function createOne (req, res, next) {
     try {
-        await validarLlavesForaneas(req.body.paciente_id);
+        await validarLlavesForaneas(req.body.DIA_id);
 
         const receta = await models.receta.create({
             DIA_id: req.body.DIA_id,
-            REC_valor_total: req.body.valor_total
+            REC_valor_total: 0
             
         });
 
