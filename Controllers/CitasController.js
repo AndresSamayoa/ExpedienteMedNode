@@ -242,6 +242,24 @@ async function readDetailed (req, res, next) {
     }
 }
 
+async function  pas_detalle_pago_cita (req, res, next) {
+    try {
+
+        // Consumir funcion de detalle pago
+        const [records]= await _expMedico.query('exec pas_detalle_pago_cita :id;', 
+            {replacements: {id: req.params.id}}
+        );
+
+        return res.status(200).send({
+            status: true,
+            message: 'Exito al consultar',
+            data: records
+        })
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     readAll,
     readOne,
@@ -251,5 +269,6 @@ module.exports = {
     updateAttended,
     updateClose,
     searchAll,
-    readDetailed
+    readDetailed,
+     pas_detalle_pago_cita,
 }
