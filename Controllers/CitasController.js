@@ -293,7 +293,8 @@ async function ficha_medica_cita (req, res, next) {
 
         for (const diagnostico of diagnosticos) {
             const recetas = await models.receta.findAll({ where: { DIA_id: diagnostico.DiagnosticoId } });
-            const recetas_respuesta = []
+            const recetas_respuesta = [];
+            let total_receta = 0
 
             for (const receta of recetas) {
                 const [detalles_receta] = await _expMedico.query(
@@ -301,13 +302,15 @@ async function ficha_medica_cita (req, res, next) {
                     {replacements: { Receta: receta.REC_id } }
                 );
 
-                recetas_respuesta.push({
-                    ...receta.DataValues,
-                    detalles: detalles_receta
-                });
+                for (const detalle of detalles_receta) {
+                    total_receta += detalle.DET_subtotal;
+                }
+
+                recetas_respuesta.push(...detalles_receta);
             }
 
-            diagnostico['recetas'] = recetas_respuesta;
+            diagnostico['DetalleRecetas'] = recetas_respuesta;
+            diagnostico['TotalRecetas'] = total_receta;
         }
 
         cita['diagnosticos'] = diagnosticos;
