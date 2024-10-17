@@ -260,6 +260,71 @@ async function  pas_detalle_pago_cita (req, res, next) {
     }
 };
 
+async function ficha_medica_cita (req, res, next) {
+    try {
+        const [citaArr] = await _expMedico.query(
+            'select * from fas_info_general_cita(:Cita);',
+            {replacements: {Cita: req.params.id}}
+        );
+
+        const cita = citaArr[0];
+
+        if(!cita) {
+            throw notFoundError('No se encontro la cita')
+        }
+
+        const [procedimientos] = await _expMedico.query(
+            'select * from fas_procedimientos_medicos_cita(:Cita)',
+            {replacements: {Cita: cita.CIT_id}}
+        );
+
+        cita['procedimientos'] = procedimientos;
+
+        // Consultar signos vitales
+        const signos_vitales = await models.signosvitales.findOne({where: {CIT_id: cita.CIT_id}});
+
+        cita['signosVitales'] = signos_vitales;
+
+        // Consultar diagnosticos
+        const [diagnosticos] = await _expMedico.query(
+            'select * from fas_buscar_diagnosticos(:Cita);',
+            {replacements: { Cita: cita.CIT_id } }
+        );
+
+        for (const diagnostico of diagnosticos) {
+            const recetas = await models.receta.findAll({ where: { DIA_id: diagnostico.DiagnosticoId } });
+            const recetas_respuesta = [];
+            let total_receta = 0
+
+            for (const receta of recetas) {
+                const [detalles_receta] = await _expMedico.query(
+                    'select * from fas_buscar_detalle_receta(:Receta);',
+                    {replacements: { Receta: receta.REC_id } }
+                );
+
+                for (const detalle of detalles_receta) {
+                    total_receta += detalle.DET_subtotal;
+                }
+
+                recetas_respuesta.push(...detalles_receta);
+            }
+
+            diagnostico['DetalleRecetas'] = recetas_respuesta;
+            diagnostico['TotalRecetas'] = total_receta;
+        }
+
+        cita['diagnosticos'] = diagnosticos;
+
+        return res.status(200).send({
+            status: true,
+            message: 'Cita consultada exitosamente',
+            data: cita
+        })
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     readAll,
     readOne,
@@ -270,5 +335,6 @@ module.exports = {
     updateClose,
     searchAll,
     readDetailed,
-     pas_detalle_pago_cita,
+    pas_detalle_pago_cita,
+    ficha_medica_cita,
 }
