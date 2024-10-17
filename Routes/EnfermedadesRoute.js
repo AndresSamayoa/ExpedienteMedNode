@@ -11,6 +11,6 @@ routes.put('/Enfermedades/:id', updateOne);
 routes.delete('/Enfermedades/:id',  deleteOne);
 routes.get('/Enfermedades', readAll);
 routes.get('/Enfermedades/buscar',  searchAll);
-routes.get('/Enfermedades', getEnfermedadesMenosComunes);
+routes.get('/Enfermedades/menos/comunes', getEnfermedadesMenosComunes);
 
 module.exports = routes;
