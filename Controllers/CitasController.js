@@ -325,6 +325,30 @@ async function ficha_medica_cita (req, res, next) {
     }
 };
 
+async function citasrangodefechas(req,res,next)
+{
+    try 
+    {
+        const {fechainicio,fechafin}=req.query;
+        const[cita]=await _expMedico.query(
+                'SELECT * FROM FAA_CITAS_EN_RANGO_DE_FECHA (:fechainicio,:fechafin);',
+                {replacements:{fechainicio,fechafin}}
+        );
+        return res.status(200).send(
+            {
+                status:true,
+                message:'exito al consultar cita por rango de fecha',
+                data: cita
+            }
+        );
+    } catch (error)
+    {
+        next(error);
+    };
+    
+
+}
+
 module.exports = {
     readAll,
     readOne,
@@ -337,4 +361,6 @@ module.exports = {
     readDetailed,
     pas_detalle_pago_cita,
     ficha_medica_cita,
+    citasrangodefechas,
+
 }
