@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { readAll, createOne, deleteOne, updateOne, searchAll, readOne, updateAttended, updateClose, readDetailed, pas_detalle_pago_cita, ficha_medica_cita } = require('../Controllers/CitasController');
+const { readAll, createOne, deleteOne, updateOne, searchAll, readOne, updateAttended, updateClose, readDetailed, pas_detalle_pago_cita, ficha_medica_cita, citasrangodefechas } = require('../Controllers/CitasController');
 
 const { schemaCrearCitaBody, schemaDeleteCitaParam, schemaSearchCitaQuery, schemaUpdateCitaBody, schemaUpdateCitaParam, schemaGetCitaParam } = require('../Middlewares/Validator/Citas')
 const { validateBody, validateParams, validateQuery } = require('../Middlewares/Validador')
@@ -18,5 +18,8 @@ routes.get('/citas/buscar', validateQuery(schemaSearchCitaQuery), searchAll);
 routes.get('/citas/detalle/pago/:id', pas_detalle_pago_cita);
 routes.get('/citas/ficha/medica/:id', ficha_medica_cita);
 routes.get('/citas/:id', validateParams(schemaGetCitaParam), readOne);
+
+routes.get('/citas/rangode/fecha/', citasrangodefechas);
+
 
 module.exports = routes;
