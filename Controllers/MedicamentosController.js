@@ -102,10 +102,32 @@ async function updateOne (req, res, next) {
     }
 };
 
+async function getReporteMedicamentos (req, res, next) {
+
+    try {
+        const{fecha_inicio, fecha_fin} = req.query;
+        const[medicamentos] = await _expMedico.query(
+            'SELECT * FROM fn_Reporte_Medicamentos(:fecha_inicio, :fecha_fin)',
+            {replacements: {fecha_inicio, fecha_fin} }
+        );
+
+        return res.status(200).send({
+            status: true,
+            message: 'Éxito al Consultar Reporte Medicamentos',
+            data: medicamentos
+        });
+
+    } catch (error) {
+        next (error);
+    }
+}
+
 module.exports = {
     readAll,
     createOne,
     deleteOne,
     updateOne,
-    searchAll
+    searchAll,
+    getReporteMedicamentos
+
 }
