@@ -12,6 +12,6 @@ routes.put('/medicamentos/:id', updateOne);
 routes.delete('/medicamentos/:id', deleteOne);
 routes.get('/medicamentos', readAll);
 routes.get('/medicamentos/buscar', searchAll);
-routes.get('/Reporte/Medicamentos', getReporteMedicamentos);
+routes.get('/medicamentos/reporte/rango', getReporteMedicamentos);
 
 module.exports = routes;
