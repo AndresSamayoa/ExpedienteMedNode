@@ -132,6 +132,22 @@ async function getEnfermedadesComunes(req, res, next) {
         next(error);
     }
 };
+async function getEnfermedadesMenosComunes(req, res, next) {
+    try {
+        const { fecha_inicio, fecha_fin } = req.query;
+        const [enfermedades] = await _expMedico.query(
+            'SELECT * FROM fas_enfermedades_menos_comunes(:fecha_inicio, :fecha_fin);',
+            { replacements: { fecha_inicio, fecha_fin } }
+        );
+        return res.status(200).send({
+            status: true,
+            message: 'Éxito al consultar enfermedades menos comunes',
+            data: enfermedades
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 
 
 module.exports = {
@@ -140,5 +156,6 @@ module.exports = {
     deleteOne,
     updateOne,
     searchAll,
-    getEnfermedadesComunes
+    getEnfermedadesComunes,
+    getEnfermedadesMenosComunes,
 }

@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { readAll, createOne, deleteOne, updateOne, searchAll } = require('../Controllers/MedicamentosController');
+const { readAll, createOne, deleteOne, updateOne, searchAll, getReporteMedicamentos } = require('../Controllers/MedicamentosController');
 
 // const { schemaCrearMedicamentoBody, schemaDeleteMedicamentoParam, schemaSearchMedicamentoQuery, schemaUpdateMedicamentoBody, schemaUpdateMedicamentoParam } = require('../Middlewares/Validator/Medicamentos')
 // const { validateBody, validateParams, validateQuery } = require('../Middlewares/Validador')
@@ -12,5 +12,6 @@ routes.put('/medicamentos/:id', updateOne);
 routes.delete('/medicamentos/:id', deleteOne);
 routes.get('/medicamentos', readAll);
 routes.get('/medicamentos/buscar', searchAll);
+routes.get('/medicamentos/reporte/rango', getReporteMedicamentos);
 
 module.exports = routes;
