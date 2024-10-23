@@ -104,6 +104,34 @@ async function updateOne (req, res, next) {
     }
 };
 
+async function getEnfermedadesComunes(req, res, next) {
+    try {
+        const { fecha_inicio, fecha_fin } = req.query;
+      
+
+        if (!fecha_inicio || !fecha_fin) {
+            return res.status(400).send({
+                status: false,
+                message: 'Por favor, proporcione ambas fechas: fecha de inicio y fecha y fin.'
+            });
+        }
+
+        const [enfermedades] = await _expMedico.query(
+            'EXEC SP_ENFERMEDADES_COMUNES :fecha_inicio, :fecha_fin',
+            {
+                replacements: { fecha_inicio, fecha_fin }
+            }
+        );
+
+        return res.status(200).send({
+            status: true,
+            message: 'Éxito al Consultar Enfermedades Comunes',
+            data: enfermedades
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 async function getEnfermedadesMenosComunes(req, res, next) {
     try {
         const { fecha_inicio, fecha_fin } = req.query;
@@ -119,8 +147,7 @@ async function getEnfermedadesMenosComunes(req, res, next) {
     } catch (error) {
         next(error);
     }
-}
-
+};
 
 
 module.exports = {
@@ -129,5 +156,6 @@ module.exports = {
     deleteOne,
     updateOne,
     searchAll,
-    getEnfermedadesMenosComunes
+    getEnfermedadesComunes,
+    getEnfermedadesMenosComunes,
 }
